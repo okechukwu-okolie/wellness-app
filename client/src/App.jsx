@@ -7,6 +7,7 @@ import Signup from "./components/Signup";
 import Tracker from "./components/Tracker";
 import Goals from "./components/Goals";
 import Community from "./components/Community";
+import PageWrapper from "./components/PageWrapper";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,7 +28,9 @@ export default function App() {
               path="/"
               element={
                 <PrivateRoute>
-                  <Dashboard />
+                  <PageWrapper page="dashboard">
+                    <Dashboard />
+                  </PageWrapper>
                 </PrivateRoute>
               }
             />
@@ -35,7 +38,9 @@ export default function App() {
               path="/tracker"
               element={
                 <PrivateRoute>
-                  <Tracker />
+                  <PageWrapper page="tracker">
+                    <Tracker />
+                  </PageWrapper>
                 </PrivateRoute>
               }
             />
@@ -43,7 +48,9 @@ export default function App() {
               path="/goals"
               element={
                 <PrivateRoute>
-                  <Goals />
+                  <PageWrapper page="goals">
+                    <Goals />
+                  </PageWrapper>
                 </PrivateRoute>
               }
             />
@@ -51,12 +58,28 @@ export default function App() {
               path="/community"
               element={
                 <PrivateRoute>
-                  <Community />
+                  <PageWrapper page="community">
+                    <Community />
+                  </PageWrapper>
                 </PrivateRoute>
               }
             />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/login"
+              element={
+                <PageWrapper page="login">
+                  <Login />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <PageWrapper page="signup">
+                  <Signup />
+                </PageWrapper>
+              }
+            />
           </Routes>
         </div>
         <ToastContainer />

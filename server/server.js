@@ -14,7 +14,19 @@ const recommendRoutes = require("./routes/recommend");
 const app = express();
 app.use(helmet());
 app.use(express.json());
-app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
+
+// Configure CORS explicitly so the frontend can send Authorization header
+// const corsOptions = {
+//   origin: process.env.CLIENT_URL || "http://localhost:5173",
+//   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+//   // If you need to send cookies/auth credentials set this to true and
+//   // ensure `origin` is not '*'
+//   credentials: false,
+// };
+app.use(cors());
+// Ensure preflight requests are handled
+// app.options("*", cors(corsOptions));
 
 const limiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 100 });
 app.use(limiter);
@@ -27,8 +39,12 @@ app.use("/api/recommend", recommendRoutes);
 
 // Ensure critical env is present
 if (!process.env.JWT_SECRET) {
-  console.error('FATAL: JWT_SECRET is not set. Please set JWT_SECRET in server/.env or environment variables.');
-  console.error('You can copy .env.example to server/.env and fill JWT_SECRET with a strong random string.');
+  console.error(
+    "FATAL: JWT_SECRET is not set. Please set JWT_SECRET in server/.env or environment variables."
+  );
+  console.error(
+    "You can copy .env.example to server/.env and fill JWT_SECRET with a strong random string."
+  );
   process.exit(1);
 }
 
